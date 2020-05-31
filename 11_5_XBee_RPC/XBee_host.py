@@ -10,19 +10,19 @@ char = s.read(2)
 print("Enter AT mode.")
 print(char.decode())
 
-s.write("ATMY <BASE_MY>\r\n".encode())
+s.write("ATMY 0x104\r\n".encode())
 char = s.read(3)
-print("Set MY <BASE_MY>.")
+print("Set MY 0x104.")
 print(char.decode())
 
-s.write("ATDL <BASE_DL>\r\n".encode())
+s.write("ATDL 0x204\r\n".encode())
 char = s.read(3)
-print("Set DL <BASE_DL>.")
+print("Set DL 0x204.")
 print(char.decode())
 
-s.write("ATID <PAN_ID>\r\n".encode())
+s.write("ATID 0x1\r\n".encode())
 char = s.read(3)
-print("Set PAN ID <PAN_ID>.")
+print("Set PAN ID 0x1.")
 print(char.decode())
 
 s.write("ATWR\r\n".encode())
@@ -48,22 +48,7 @@ print(char.decode())
 print("start sending RPC")
 while True:
     # send RPC to remote
-    s.write("/myled1/write 1\r".encode())
-    time.sleep(1)
-
-    s.write("/myled2/write 1\r".encode())
-    time.sleep(1)
-
-    s.write("/myled3/write 1\r".encode())
-    time.sleep(1)
-
-    s.write("/myled3/write 0\r".encode())
-    time.sleep(1)
-
-    s.write("/myled2/write 0\r".encode())
-    time.sleep(1)
-
-    s.write("/myled1/write 0\r".encode())
+    s.write("/acceDisplay/run\r".encode())
     time.sleep(1)
 
 s.close()

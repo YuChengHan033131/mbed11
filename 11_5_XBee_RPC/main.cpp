@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "mbed_rpc.h"
+#include "accelerometer.h"
 
 RawSerial pc(USBTX, USBRX);
 RawSerial xbee(D12, D11);
@@ -15,6 +16,13 @@ void xbee_rx_interrupt(void);
 void xbee_rx(void);
 void reply_messange(char *xbee_reply, char *messange);
 void check_addr(char *xbee_reply, char *messenger);
+void acceDisplay(Arguments *in, Reply *out);
+RPCFunction rpcMove(&acceDisplay, "acceDisplay");
+void acceDisplay(Arguments *in, Reply *out){
+  float x,y,z;
+  accelerometer(x,y,z);
+  pc.printf("(%f,%f,%f)",x,y,z);
+}
 
 int main(){
   pc.baud(9600);
@@ -31,14 +39,14 @@ int main(){
     xbee_reply[0] = '\0';
     xbee_reply[1] = '\0';
   }
-  xbee.printf("ATMY <REMOTE_MY>\r\n");
-  reply_messange(xbee_reply, "setting MY : <REMOTE_MY>");
+  xbee.printf("ATMY 0x204\r\n");
+  reply_messange(xbee_reply, "setting MY : 0x204");
 
-  xbee.printf("ATDL <REMOTE_DL>\r\n");
-  reply_messange(xbee_reply, "setting DL : <REMOTE_DL>");
+  xbee.printf("ATDL 0x104\r\n");
+  reply_messange(xbee_reply, "setting DL : 0x104");
 
-  xbee.printf("ATID <PAN_ID>\r\n");
-  reply_messange(xbee_reply, "setting PAN ID : <PAN_ID>");
+  xbee.printf("ATID 0x1\r\n");
+  reply_messange(xbee_reply, "setting PAN ID : 0x1");
 
   xbee.printf("ATWR\r\n");
   reply_messange(xbee_reply, "write config");
